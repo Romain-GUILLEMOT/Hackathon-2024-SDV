@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-tempo
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-tempo
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  destination:
+    namespace: app-tempo
+    server: https://kubernetes.default.svc
+  project: app-tempo
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: tempo-distributed
+    targetRevision: v1.11.0
+    helm:
+      values: |-
+        fullnameOverride: app-tempo
+        ingester:
+          persistence:
+            enabled: true
+            size: 200Gi
+            storageClass: nfs-csi
+            accessModes:
+              - ReadWriteOnce
+        metricsGenerator:
+          persistence:
+            enabled: true
+            size: 200Gi
+            storageClass: nfs-csi
+            accessModes:
+              - ReadWriteOnce
+        traces:
+          otlp:
+            http:
+              enabled: true
+              endpoint: 0.0.0.0:4318
+        gateway:
+          enabled: true
+        server:
+          http_listen_port: 3100
+        queryFrontend:
+          log_queries_longer_than: 5s
+          compress_responses: true
+        memberlist:
+          join_members:
+            - tempo-memberlist

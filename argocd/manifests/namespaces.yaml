@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra-argocd
+  labels:
+    app.kubernetes.io/name: infra-argocd
+    app.kubernetes.io/component: infra
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra-storage
+  labels:
+    app.kubernetes.io/name: infra-storage
+    app.kubernetes.io/component: infra
+    
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-grafana
+  labels:
+    app.kubernetes.io/name: app-grafana
+    app.kubernetes.io/component: app
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-mimir
+  labels:
+    app.kubernetes.io/name: app-mimir
+    app.kubernetes.io/component: app
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-loki
+  labels:
+    app.kubernetes.io/name: app-loki
+    app.kubernetes.io/component: app
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-tempo
+  labels:
+    app.kubernetes.io/name: app-tempo
+    app.kubernetes.io/component: app
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-otel
+  labels:
+    app.kubernetes.io/name: app-otel
+    app.kubernetes.io/component: app

@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-mimir
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-mimir
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  destination:
+    namespace: app-mimir
+    server: https://kubernetes.default.svc
+  project: app-mimir
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: mimir-distributed
+    targetRevision: v5.3.0
+    helm:
+      values: |-
+        fullnameOverride: app-mimir
+        image:
+          tag: r294-aec9c72
+        mimir:
+          limits:
+            ingestion_rate: 500000
+            ingestion_burst_size: 1000000
+            accept_ha_samples: true
+            ha_cluster_label: "cluster"
+            ha_replica_label: "replica"
+          query_scheduler:
+            max_outstanding_requests_per_tenant: 200
+        persistence:
+          enabled: true
+          storageClassName: "nfs-csi"
+          size: 200Gi
+        volumeMounts:
+          - name: mimir-data
+            mountPath: /data/mimir/blocks
+            subPath: ""
+            readOnly: false
+        minio:
+          enabled: true
+          persistence:
+            size: 500Gi
+            accessModes:
+              - ReadWriteOnce
+        compactor:
+          persistentVolume:
+            enabled: true
+            storageClassName: "nfs-csi"
+            size: 200Gi
+            accessModes:
+              - ReadWriteOnce

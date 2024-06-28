@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-grafana
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-grafana
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  destination:
+    namespace: app-grafana
+    server: https://kubernetes.default.svc
+  project: app-grafana
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: v8.0.2
+    helm:
+      values: |-
+        image:
+          tag: 10.4.4
+        service:
+          enabled: true
+          type: LoadBalancer
+          port: 80
+          targetPort: 3000
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        persistence:
+          type: pvc
+          enabled: true
+          storageClassName: nfs-csi
+          accessModes:
+            - ReadWriteOnce
+          size: 100Gi
+        admin:
+          existingSecret: grafana-credentials
+          userKey: admin-user
+          passwordKey: admin-password
+        grafana.ini:
+          server:
+            domain: ""
+            root_url: /
+        sidecar:
+          dashboards:
+            searchNamespace: ALL

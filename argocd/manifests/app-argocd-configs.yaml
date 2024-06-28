@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-configs
+  namespace: infra-argocd
+spec:
+  destination:
+    namespace: infra-argocd
+    server: https://kubernetes.default.svc
+  project: argocd-apps
+  source:
+    directory:
+      recurse: true
+    path: argocd/manifests
+    repoURL: https://gitlab.com/neosoft-group/practice/devops/public/hackaton/supdevinci-equipe-9.git
+    targetRevision: main
+  syncPolicy:
+    automated: {}

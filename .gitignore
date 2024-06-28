@@ -1,0 +1,3 @@
+/terraform
+/argocd/yaml/cm.yaml
+/argocd/yaml/secrets.yaml

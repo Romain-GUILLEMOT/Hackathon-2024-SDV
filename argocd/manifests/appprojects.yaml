@@ -1,0 +1,297 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: default
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: infra-argocd
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+    - group: ""
+      kind: ""
+  destinations:
+    - namespace: infra-argocd
+      server: https://kubernetes.invalid
+  sourceRepos:
+    - ""
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: argocd-apps
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: infra-argocd
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  description: deploy app-of-apps and apps in the infra-argocd namespace
+  destinations:
+  - namespace: infra-argocd
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  - group: rbacmanager.reactiveops.io
+    kind: RBACDefinition
+  namespaceResourceWhitelist:
+  - group: argoproj.io
+    kind: Application
+  - group: argoproj.io
+    kind: AppProject
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  sourceRepos:
+  - https://charts.adfinis.com
+  - https://gitlab.com/neosoft-group/practice/devops/public/hackaton/supdevinci-equipe-9
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra-argocd
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: infra-argocd
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  description: deploy the hosted argocd instance
+  clusterResourceWhitelist:
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  destinations:
+  - namespace: infra-argocd
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://argoproj.github.io/argo-helm
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra-storage
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: infra-storage
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  description: deploy storage apps to the infra-storage namespace
+  clusterResourceWhitelist:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+    - group: storage.k8s.io
+      kind: StorageClass
+    - group: storage.k8s.io
+      kind: CSIDriver
+  destinations:
+    - namespace: infra-storage
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+  sourceRepos:
+    - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-grafana
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-grafana
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: policy
+    kind: PodSecurityPolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+  destinations:
+  - namespace: app-grafana
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://grafana.github.io/helm-charts
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-mimir
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-mimir
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: policy
+    kind: PodSecurityPolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: Ingress
+  destinations:
+  - namespace: app-mimir
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://grafana.github.io/helm-charts
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-loki
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-loki
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: policy
+    kind: PodSecurityPolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: Ingress
+  destinations:
+  - namespace: app-loki
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://grafana.github.io/helm-charts
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-tempo
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-tempo
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: policy
+    kind: PodSecurityPolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: Ingress
+  destinations:
+  - namespace: app-tempo
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://grafana.github.io/helm-charts
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-otel
+  namespace: infra-argocd
+  labels:
+    app.kubernetes.io/name: helm-infra-argocd
+    app.kubernetes.io/component: app-otel
+    app.kubernetes.io/managed-by: helm-infra-argocd
+spec:
+  clusterResourceWhitelist:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+  - group: policy
+    kind: PodSecurityPolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: Ingress
+  destinations:
+  - namespace: app-otel
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  sourceRepos:
+  - https://open-telemetry.github.io/opentelemetry-helm-charts
