@@ -15,7 +15,6 @@ metadata:
   labels:
     app.kubernetes.io/name: infra-storage
     app.kubernetes.io/component: infra
-    
 ---
 
 apiVersion: v1
@@ -64,4 +63,24 @@ metadata:
   name: app-otel
   labels:
     app.kubernetes.io/name: app-otel
+    app.kubernetes.io/component: app
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-pokeshop
+  labels:
+    app.kubernetes.io/name: app-pokeshop
+    app.kubernetes.io/component: app
+  
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-tracetest
+  labels:
+    app.kubernetes.io/name: app-tracetest
     app.kubernetes.io/component: app

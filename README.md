@@ -1,93 +1,76 @@
-# SupDeVinci Equipe 9
+# SupDeVinci Equipe 1
 
+## Récupérer le kubeconfig
 
+REQUIS : ```aws cli``` et ```kubectl```
 
-## Getting started
+Pour récupérer le kubeconfig il faut exporter les variables AWS contenu dans ce repo en executant les commandes suivantes : 
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/neosoft-group/practice/devops/public/hackaton/supdevinci-equipe-9.git
-git branch -M main
-git push -uf origin main
+```shell
+export AWS_ACCESS_KEY_ID="MY_ACCESS_KEY_ID"
 ```
 
-## Integrate with your tools
+```shell
+export AWS_SECRET_ACCESS_KEY="MY_SECRET_ACCESS_KEY"
+```
 
-- [ ] [Set up project integrations](https://gitlab.com/neosoft-group/practice/devops/public/hackaton/supdevinci-equipe-9/-/settings/integrations)
+```shell
+export AWS_SESSION_TOKEN="MY_SESSION_TOKEN"
+```
 
-## Collaborate with your team
+Ensuite il suffit de récupérer le kubeconfig avec le cli aws avec la commande suivante :
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```shell
+aws eks --region eu-west-1 update-kubeconfig --name eks-cluster-equipe-09
+```
 
-## Test and Deploy
+## Infrastructure 
 
-Use the built-in continuous integration in GitLab.
+Vous disposez d'un cluster Kubernetes déployé avec le service managé EKS de AmazonWebServices.
+Pour déployer les applications un ArgoCD à été installé sur le cluster, ci dessous la liste des outils installés sur le cluster qui vous seront utiles pour le hackaton : 
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+    - app-grafana
+    - app-loki
+    - app-mimir
+    - app-tempo
+    - app-otel
 
-***
+Vous pouvez modifier ces applications.
 
-# Editing this README
+Les applications suivantes ne doivent absolument pas être modifié :
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+    - app-argocd
+    - argocd-configs
+    - infra-apps
+    - infra-nfs
 
-## Suggestions for a good README
+Vous pouvez rajoutez d'autres applications si vous le souhaitez via argoCD ou non.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Il y a deux applications qui n'ont pas été déployées avec ArgoCD qui sont :
 
-## Name
-Choose a self-explaining name for your project.
+    - app-pokeshop
+    - app-tracetest
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Vous n'avez de toute façon pas besoin de toucher à cces applications.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Url et identifiants de connexion
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Les passwords des applications sont enregistrés dans les variables gitlab.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- argocd :
+    - url : a753797ed306743d2a965e4916b1f37f-c1a2f4014f7cf7a4.elb.eu-west-1.amazonaws.com
+    - user : admin
+- grafana :
+    - url : a72896e0a59504e9287b70b2f6848527-3a0b8633ae3acfab.elb.eu-west-1.amazonaws.com
+    - user : admin
+- pokeshop :
+    - url : a412e7325e40b4493b95baa7b14658fa-1615178376.eu-west-1.elb.amazonaws.com
+- tracetest :
+    - url : aae662bd4fd3c4d79a9fc5038f701664-a83ffec49036515f.elb.eu-west-1.amazonaws.com:11633
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Pour utilisez Pokeshop avec tracetest vous pouvez trouvez les documentations içi :
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+    - https://github.com/kubeshop/pokeshop/blob/master/docs/overview.md
+    - https://tracetest.io/
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Pour l'utilisation de TraceTest et de Pokeshop n'hésitez pas à nous contacter.    

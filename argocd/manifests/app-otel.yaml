@@ -21,6 +21,6 @@ spec:
     helm:
       values: |-
         fullnameOverride: app-otel
-        mode: daemonset
+        mode: deployment
         image:
           repository: otel/opentelemetry-collector-contrib
