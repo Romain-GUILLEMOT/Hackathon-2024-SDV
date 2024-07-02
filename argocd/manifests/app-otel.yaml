@@ -25,6 +25,8 @@ spec:
         image:
           repository: otel/opentelemetry-collector-contrib
         config:
+          logging:
+            level: debug 
           receivers:
             otlp:
               protocols:
