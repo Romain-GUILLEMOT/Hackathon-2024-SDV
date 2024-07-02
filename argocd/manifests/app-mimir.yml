@@ -30,6 +30,7 @@ spec:
             accept_ha_samples: true
             ha_cluster_label: "cluster"
             ha_replica_label: "replica"
+            default_tenant: "neosoft"
           query_scheduler:
             max_outstanding_requests_per_tenant: 200
           logLevel: debug
