@@ -42,9 +42,18 @@ spec:
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
-      
+            logging:
+              loglevel: debug
           service:
             pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [logging]
+              metrics:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [logging]
               logs:
                 receivers: [otlp,hostmetrics]
                 processors: [batch]
