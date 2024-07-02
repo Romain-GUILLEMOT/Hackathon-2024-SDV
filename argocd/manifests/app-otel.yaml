@@ -28,8 +28,8 @@ spec:
           receivers:
             otlp:
               protocols:
-                grpc:
-                http:
+                grpc: {}
+                http: {}
           exporters:
             loki:
               endpoint: "http://app-loki-gateway:80/loki/api/v1/push"
