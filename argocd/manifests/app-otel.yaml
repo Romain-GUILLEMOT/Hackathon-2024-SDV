@@ -47,11 +47,11 @@ spec:
           service:
             pipelines:
               traces:
-                receivers: [otlp]
+                receivers: [otlp,hostmetrics]
                 processors: [batch]
                 exporters: [logging]
               metrics:
-                receivers: [otlp]
+                receivers: [otlp,hostmetrics]
                 processors: [batch]
                 exporters: [logging]
               logs:
