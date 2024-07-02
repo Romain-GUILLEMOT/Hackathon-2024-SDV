@@ -45,9 +45,21 @@ spec:
                 network: {}
                 filesystem: {}
                 disk: {}
-            httpd:
-              endpoint: "0.0.0.0:8080"  # Ajouté pour surveiller le trafic HTTP
-              
+            prometheus:
+              config:
+                scrape_configs:
+                  - job_name: 'kubernetes-pods'
+                    kubernetes_sd_configs:
+                      - role: pod
+                    relabel_configs:
+                      - action: labelmap
+                        regex: __meta_kubernetes_pod_label_(.+)
+                      - action: replace
+                        source_labels: [__meta_kubernetes_namespace]
+                        target_label: kubernetes_namespace
+                      - action: replace
+                        source_labels: [__meta_kubernetes_pod_name]
+                        target_label: kubernetes_pod_name  
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
