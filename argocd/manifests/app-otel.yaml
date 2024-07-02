@@ -25,6 +25,10 @@ spec:
         image:
           repository: otel/opentelemetry-collector-contrib
         config:
+          processors:
+            resourcedetection:
+              detectors: [env, system]
+            cumulativetodelta:
           receivers:
             otlp:
               protocols:
@@ -38,6 +42,10 @@ spec:
                 cpu: {}
                 load: {}
                 memory: {}
+                network: {}
+                filesystem: {}
+                disk: {}
+              
       
           exporters:
             loki:
@@ -56,7 +64,7 @@ spec:
                 exporters: [logging]
               metrics:
                 receivers: [otlp,hostmetrics]
-                processors: [batch]
+                processors: [cumulativetodelta, batch, resourcedetection]
                 exporters: [logging,prometheusremotewrite]
               logs:
                 receivers: [otlp]
