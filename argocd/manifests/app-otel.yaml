@@ -25,7 +25,6 @@ spec:
         image:
           repository: otel/opentelemetry-collector-contrib
         config:
-
           receivers:
             otlp:
               protocols:
@@ -39,6 +38,7 @@ spec:
                 cpu:
                 load:
                 memory:
+        
           processors:
             batch:
         
@@ -52,4 +52,5 @@ spec:
             pipelines:
               logs:
                 receivers: [otlp]
+                processors: [batch]
                 exporters: [loki]
