@@ -42,6 +42,8 @@ spec:
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
+            prometheusremotewrite:
+              endpoint: http://172.20.146.37:8080/api/v1/push
             logging:
               loglevel: debug
           service:
@@ -53,7 +55,7 @@ spec:
               metrics:
                 receivers: [otlp,hostmetrics]
                 processors: [batch]
-                exporters: [logging]
+                exporters: [logging,prometheusremotewrite]
               logs:
                 receivers: [otlp]
                 processors: [batch]

@@ -32,6 +32,7 @@ spec:
             ha_replica_label: "replica"
           query_scheduler:
             max_outstanding_requests_per_tenant: 200
+          logLevel: debug
         persistence:
           enabled: true
           storageClassName: "nfs-csi"
