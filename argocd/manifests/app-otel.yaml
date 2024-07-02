@@ -38,10 +38,7 @@ spec:
                 cpu:
                 load:
                 memory:
-        
-          processors:
-            batch:
-        
+      
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
