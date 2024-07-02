@@ -49,10 +49,7 @@ spec:
             size: 500Gi
             accessModes:
               - ReadWriteOnce
-        server:
-          http_listen_port: 8080
-        frontend:
-          compress_responses: true
+
         compactor:
           persistentVolume:
             enabled: true
