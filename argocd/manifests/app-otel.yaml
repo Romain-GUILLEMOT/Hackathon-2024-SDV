@@ -29,9 +29,9 @@ spec:
             otlp:
               protocols:
                 grpc:
-                  endpoint: "0.0.0.0:4320" 
+                  endpoint: "0.0.0.0:4317" 
                 http:
-                  endpoint: "0.0.0.0:4321"
+                  endpoint: "0.0.0.0:4318"
             hostmetrics:
               collection_interval: 10s
               scrapers:
