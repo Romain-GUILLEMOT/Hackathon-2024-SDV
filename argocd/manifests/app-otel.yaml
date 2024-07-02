@@ -47,7 +47,7 @@ spec:
           service:
             pipelines:
               traces:
-                receivers: [otlp,hostmetrics]
+                receivers: [otlp]
                 processors: [batch]
                 exporters: [logging]
               metrics:
