@@ -32,7 +32,9 @@ spec:
                 http: {}
           exporters:
             loki:
-              endpoint: "http://app-loki-gateway:80/loki/api/v1/push"
+              endpoint: "http://172.20.187.36:80/loki/api/v1/push"
+            labels:
+              job: app-otel
           service:
             pipelines:
               logs:
