@@ -26,7 +26,7 @@ spec:
             registry: docker.io
             repository: grafana/loki
             tag: 2.9.8
-          config:
+          structuredConfig:
             limits_config:
               enforce_metric_name: false
               reject_old_samples: true
@@ -41,18 +41,6 @@ spec:
               max_entries_limit_per_query: 5000000
             chunk_store_config:
               max_look_back_period: 168h
-            schema_config:
-              configs:
-                - from: 2020-10-24
-                  store: boltdb-shipper
-                  object_store: filesystem
-                  schema: v11
-                  index:
-                    prefix: index_
-                    period: 168h
-            storage_config:
-              boltdb_shipper:
-                shared_store: filesystem
             table_manager:
               retention_deletes_enabled: true
               retention_period: 168h
@@ -62,7 +50,6 @@ spec:
               chunk_idle_period: 168h
               chunk_retain_period: 168h
               max_chunk_age: 168h
-              max_transfer_retries: 0
         server:
           http_listen_port: 3100
         frontend:
@@ -73,5 +60,5 @@ spec:
         memberlist:
           join_members:
             - loki-memberlist
-        index_gateway:
+        indexGateway:
           enabled: true
