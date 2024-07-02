@@ -50,6 +50,9 @@ spec:
                   index:
                     prefix: index_
                     period: 168h
+            storage_config:
+              boltdb_shipper:
+                shared_store: filesystem
             table_manager:
               retention_deletes_enabled: true
               retention_period: 168h
