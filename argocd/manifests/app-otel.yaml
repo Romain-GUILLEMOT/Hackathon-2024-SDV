@@ -25,18 +25,19 @@ spec:
         image:
           repository: otel/opentelemetry-collector-contrib
         config:
-          logging:
-            level: debug 
+
           receivers:
             otlp:
               protocols:
                 grpc: {}
                 http: {}
           exporters:
-            loki:
+            otlphttp:
               endpoint: "http://172.20.187.36:80/loki/api/v1/push"
             labels:
               job: app-otel
+            logging:
+              loglevel: debug
           service:
             pipelines:
               logs:
