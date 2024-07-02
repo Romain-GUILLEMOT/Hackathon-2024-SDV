@@ -33,7 +33,7 @@ spec:
             otlp:
               protocols:
                 grpc:
-                  endpoint: "0.0.0.0:4317"
+                  endpoint: "0.0.0.0:4317" 
                 http:
                   endpoint: "0.0.0.0:4318"
             hostmetrics:
@@ -45,21 +45,8 @@ spec:
                 network: {}
                 filesystem: {}
                 disk: {}
-            prometheus:
-              config:
-                scrape_configs:
-                  - job_name: 'kubernetes-pods'
-                    kubernetes_sd_configs:
-                      - role: pod
-                    relabel_configs:
-                      - action: labelmap
-                        regex: __meta_kubernetes_pod_label_(.+)
-                      - action: replace
-                        source_labels: [__meta_kubernetes_namespace]
-                        target_label: kubernetes_namespace
-                      - action: replace
-                        source_labels: [__meta_kubernetes_pod_name]
-                        target_label: kubernetes_pod_name  
+              
+      
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
@@ -69,18 +56,16 @@ spec:
                 X-Scope-OrgID: "neosoft" 
             logging:
               loglevel: debug
-            otlp:
-              endpoint: "tempo:4317"  # Exporter vers Tempo
           service:
             pipelines:
               traces:
                 receivers: [otlp]
                 processors: [batch]
-                exporters: [logging, otlp]
+                exporters: [logging]
               metrics:
-                receivers: [otlp, hostmetrics]
+                receivers: [otlp,hostmetrics]
                 processors: [cumulativetodelta, batch, resourcedetection]
-                exporters: [logging, prometheusremotewrite]
+                exporters: [logging,prometheusremotewrite]
               logs:
                 receivers: [otlp]
                 processors: [batch]

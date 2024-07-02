@@ -50,10 +50,3 @@ spec:
         memberlist:
           join_members:
             - tempo-memberlist
-
-        search:
-          enabled: true
-        compactor:
-          enabled: true
-          compaction:
-            block_retention: 48h
