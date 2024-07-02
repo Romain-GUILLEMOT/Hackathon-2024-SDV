@@ -45,7 +45,6 @@ spec:
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
-              format: json
             labels:
               job: app-otel
       
