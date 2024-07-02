@@ -25,7 +25,7 @@ spec:
           image:
             registry: docker.io
             repository: grafana/loki
-            tag: 2.9.8
+            tag: 3.0.0
           structuredConfig:
             limits_config:
               enforce_metric_name: false
