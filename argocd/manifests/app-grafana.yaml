@@ -54,3 +54,21 @@ spec:
         sidecar:
           dashboards:
             searchNamespace: ALL
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+            - name: Mimir
+              type: prometheus
+              url: http://172.20.146.37:8080
+              access: proxy
+              isDefault: true
+              jsonData:
+                httpHeaderName1: "X-Scope-OrgID"
+              secureJsonData:
+                httpHeaderValue1: "neosoft"
+            - name: Loki
+              type: loki
+              url: http://172.20.118.98:3100
+              access: proxy
+              isDefault: false
