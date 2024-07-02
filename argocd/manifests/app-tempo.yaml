@@ -49,4 +49,4 @@ spec:
           compress_responses: true
         memberlist:
           join_members:
-            - tempo-memberlistM
+            - tempo-memberlist
