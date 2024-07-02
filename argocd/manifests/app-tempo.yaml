@@ -39,7 +39,7 @@ spec:
           otlp:
             http:
               enabled: true
-              endpoint: 0.0.0.0:4318
+              endpoint: 172.20.65.28:4318
         gateway:
           enabled: true
         server:

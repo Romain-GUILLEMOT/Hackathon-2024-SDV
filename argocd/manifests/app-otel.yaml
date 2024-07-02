@@ -29,8 +29,18 @@ spec:
           receivers:
             otlp:
               protocols:
-                grpc: {}
-                http: {}
+                grpc:
+                  endpoint: "0.0.0.0:4320" 
+                http:
+                  endpoint: "0.0.0.0:4321"
+            hostmetrics:
+              collection_interval: 10s
+              scrapers:
+                cpu:
+                load:
+                memory:
+            processors:
+              batch:
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
