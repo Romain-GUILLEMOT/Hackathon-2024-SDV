@@ -39,8 +39,8 @@ spec:
                 cpu:
                 load:
                 memory:
-            processors:
-              batch:
+          processors:
+            batch:
         
           exporters:
             loki:
