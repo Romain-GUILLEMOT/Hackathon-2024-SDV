@@ -33,7 +33,7 @@ spec:
             otlp:
               protocols:
                 grpc:
-                  endpoint: "0.0.0.0:4317" 
+                  endpoint: "0.0.0.0:4317"
                 http:
                   endpoint: "0.0.0.0:4318"
             hostmetrics:
@@ -45,8 +45,9 @@ spec:
                 network: {}
                 filesystem: {}
                 disk: {}
+            httpd:
+              endpoint: "0.0.0.0:8080"  # Ajouté pour surveiller le trafic HTTP
               
-      
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
@@ -56,16 +57,18 @@ spec:
                 X-Scope-OrgID: "neosoft" 
             logging:
               loglevel: debug
+            otlp:
+              endpoint: "tempo:4317"  # Exporter vers Tempo
           service:
             pipelines:
               traces:
                 receivers: [otlp]
                 processors: [batch]
-                exporters: [logging]
+                exporters: [logging, otlp]
               metrics:
-                receivers: [otlp,hostmetrics]
+                receivers: [otlp, hostmetrics]
                 processors: [cumulativetodelta, batch, resourcedetection]
-                exporters: [logging,prometheusremotewrite]
+                exporters: [logging, prometheusremotewrite]
               logs:
                 receivers: [otlp]
                 processors: [batch]
