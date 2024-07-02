@@ -32,8 +32,9 @@ spec:
                 grpc: {}
                 http: {}
           exporters:
-            otlphttp:
+            loki:
               endpoint: "http://172.20.187.36:80/loki/api/v1/push"
+              format: json
             labels:
               job: app-otel
             logging:
