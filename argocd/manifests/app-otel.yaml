@@ -55,6 +55,6 @@ spec:
                 processors: [batch]
                 exporters: [logging]
               logs:
-                receivers: [otlp,hostmetrics]
+                receivers: [otlp]
                 processors: [batch]
                 exporters: [loki]
