@@ -112,6 +112,12 @@ spec:
               detectors: [env, system]
             cumulativetodelta:
           receivers:
+            kubeletstats:
+                auth_type: serviceAccount
+                endpoint: "https://${NODE_NAME}:10250"
+                collection_interval: 10s
+                extra_metadata_labels:
+                  - "node"
             k8s_events:
               namespaces: []
             filelog:
