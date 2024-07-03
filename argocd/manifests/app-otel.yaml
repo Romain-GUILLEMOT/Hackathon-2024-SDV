@@ -133,9 +133,9 @@ spec:
                 processors: [batch]
                 exporters: [logging]
               metrics:
-                receivers: [otlp]
-                processors: [cumulativetodelta, batch, resourcedetection]
-                exporters: [logging, prometheusremotewrite]
+                receivers: [otlp, prometheus]
+                processors: [memory_limiter, batch]
+                exporters: [prometheusremotewrite/metricsService]
               logs:
                 receivers: [filelog]
                 processors: [batch]
