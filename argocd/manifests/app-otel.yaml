@@ -42,6 +42,12 @@ spec:
           - name: varlog
             mountPath: /var/log
             readOnly: true
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+    
         clusterRole:
           create: true
           rules:
