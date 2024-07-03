@@ -21,12 +21,12 @@ spec:
     helm:
       volumeMounts:
         - name: varlog
-          mountPath: /var/log
+          mountPath: /var/log/pods
           readOnly: true
       volumes:
         - name: varlog
           hostPath:
-            path: /var/log
+            path: /var/log/pods
             type: DirectoryOrCreate
       values: |-
         fullnameOverride: app-otel
@@ -46,18 +46,16 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include: [ /var/log/**/*.log ]
+              include: [ /var/log/pods/**/*.log ]
               start_at: beginning
               operators:
                 - type: regex_parser
-                  regex: '^(?P<timestamp>\\S+) (?P<stream>\\S+) (?P<log>.*)$'
+                  regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<log>.*)$'
                   timestamp:
-                    parse_from: attributes
+                    parse_from: attributes.timestamp
                     layout: '%Y-%m-%dT%H:%M:%S.%fZ'
                 - type: json_parser
                   expression: log
-        
-        
         
           exporters:
             loki:
