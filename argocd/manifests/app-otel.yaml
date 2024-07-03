@@ -74,10 +74,10 @@ spec:
                 processors: [batch]
                 exporters: [logging]
               metrics:
-                receivers: [otlp,hostmetrics]
+                receivers: [otlp]
                 processors: [cumulativetodelta, batch, resourcedetection]
                 exporters: [logging,prometheusremotewrite]
               logs:
-                receivers: [otlp]
+                receivers: [otlp,filelog]
                 processors: [batch]
                 exporters: [loki]
