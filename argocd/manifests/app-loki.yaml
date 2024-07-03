@@ -30,7 +30,7 @@ spec:
             limits_config:
               enforce_metric_name: false
               reject_old_samples: true
-              reject_old_samples_max_age: 168h
+              reject_old_samples_max_age: 720h
               max_cache_freshness_per_query: 24h
               split_queries_by_interval: 24h
               max_query_length: 168h
@@ -42,16 +42,16 @@ spec:
               ingestion_burst_size_mb: 24
               ingestion_rate_mb: 16
             chunk_store_config:
-              max_look_back_period: 168h
+              max_look_back_period: 780h
             table_manager:
               retention_deletes_enabled: true
-              retention_period: 168h
+              retention_period: 720h
             ingester:
               chunk_block_size: 26214400
               chunk_target_size: 157286400
               chunk_idle_period: 168h
-              chunk_retain_period: 168h
-              max_chunk_age: 168h
+              chunk_retain_period: 720h
+              max_chunk_age: 720h
             server:
               grpc_server_max_recv_msg_size: 16777216
               grpc_server_max_send_msg_size: 16777216
