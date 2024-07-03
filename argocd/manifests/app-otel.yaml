@@ -20,11 +20,6 @@ spec:
     targetRevision: v0.93.3
     helm:
       values: |-
-        extraEnvs:
-          - name: K8S_NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
         fullnameOverride: app-otel
         mode: deployment
         podAnnotations:
@@ -202,7 +197,7 @@ spec:
           
                   - job_name: node-exporter-ec2-nfs
                     static_configs:
-                      - targets: ['ec2-3-253-50-50.eu-west-1.compute.amazonaws.com:9100']
+                      - targets: ['nodeexporter-prometheus-node-exporter.default:9100']
                         labels:
                           service: nfs
 
