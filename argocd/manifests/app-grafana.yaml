@@ -69,6 +69,6 @@ spec:
                 httpHeaderValue1: "neosoft"
             - name: Loki
               type: loki
-              url: http://app-loki-query-frontend:3100
+              url: http://app-loki-query-frontend.app-loki:3100
               access: proxy
               isDefault: false

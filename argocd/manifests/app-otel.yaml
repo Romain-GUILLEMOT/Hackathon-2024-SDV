@@ -110,7 +110,7 @@ spec:
         
           exporters:
             loki:
-              endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
+              endpoint: "http://app-loki-distributor.app-loki:3100/loki/api/v1/push"
               sending_queue:
                 enabled: true
                 num_consumers: 4
