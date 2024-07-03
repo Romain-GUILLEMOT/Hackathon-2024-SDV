@@ -52,13 +52,20 @@ spec:
                   endpoint: "0.0.0.0:4318"
             filelog:
               include_file_path: true
-              include: 
+              include:
                 - /logspods/**/*.log
               start_at: beginning
               operators:
-              - id: container-parser
-                type: container
-        
+                - type: regex_parser
+                  regex: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z)'
+                  timestamp:
+                    parse_from: attributes.timestamp
+                    layout: '2006-01-02T15:04:05.000000000Z'
+                - type: filter
+                  expr: 'timestamp.Sub(time.Now()) > -168h'
+                - type: container
+                  id: container-parser
+            
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
