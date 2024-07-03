@@ -14,7 +14,6 @@ spec:
   project: app-otel
   syncPolicy:
     automated: {}
-
   source:
     repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
     chart: opentelemetry-collector
@@ -56,10 +55,10 @@ spec:
               start_at: beginning
               operators:
                 - type: regex_parser
-                  regex: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z)'
+                  regex: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)'
                   timestamp:
                     parse_from: attributes.timestamp
-                    layout: '2006-01-02T15:04:05.000000000Z'
+                    layout: '2006-01-02T15:04:05Z'
                 - type: filter
                   expr: 'timestamp.Sub(time.Now()) > -168h'
                 - type: container
