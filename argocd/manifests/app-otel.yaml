@@ -313,11 +313,11 @@ spec:
               headers:
                 X-Scope-OrgID: neosoft
             otlp/tempo:
-              endpoint: http://app-tempo-distributo.app-tempo:4317
+              endpoint: http://app-tempo-distributor.app-tempo:4317
               tls:
                 insecure: true
             otlphttp/tempo:
-              endpoint: http://app-tempo-distributo.app-tempo:4318
+              endpoint: http://app-tempo-distributor.app-tempo:4318
               tls:
                 insecure: true
             logging:
