@@ -311,7 +311,7 @@ spec:
                 'k8s.cluster.name': 'eks-cluster'
               endpoint: http://app-mimir-nginx.app-mimir/api/v1/push
               headers:
-                X-Scope-OrgID: opentelemetry-collector
+                X-Scope-OrgID: neosoft
             logging:
               verbosity: detailed
           service:
