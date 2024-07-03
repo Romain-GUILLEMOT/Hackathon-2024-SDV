@@ -60,7 +60,7 @@ spec:
                     parse_from: attributes.timestamp
                     layout: '%Y-%m-%dT%H:%M:%S.%fZ'
                 - type: filter
-                  expr: 'timestamp.Sub(time.Now()) > -168h'
+                  expr: 'time.Since(timestamp) < 168 * time.Hour'
                 - type: container
                   id: container-parser
         
