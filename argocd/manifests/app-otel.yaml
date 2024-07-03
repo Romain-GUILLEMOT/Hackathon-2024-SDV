@@ -52,10 +52,11 @@ spec:
                 - type: regex_parser
                   regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<log>.*)$'
                   timestamp:
-                    parse_from: attributes.timestamp
+                    parse_from: body
                     layout: '%Y-%m-%dT%H:%M:%S.%fZ'
                 - type: json_parser
                   expression: log
+
         
           exporters:
             loki:
