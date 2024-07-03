@@ -46,8 +46,7 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include:
-                - /var/log/**/*.log
+              include: [ /var/log/**/*.log ]
               start_at: beginning
               operators:
                 - type: regex_parser
