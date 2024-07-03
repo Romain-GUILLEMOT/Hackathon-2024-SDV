@@ -202,7 +202,7 @@ spec:
         
           extensions:
             health_check:
-              endpoint: app-otel.app-otel:13133
+              endpoint: localhost:13133
 
           exporters:
             loki:
