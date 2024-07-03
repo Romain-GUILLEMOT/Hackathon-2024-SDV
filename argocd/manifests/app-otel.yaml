@@ -312,6 +312,8 @@ spec:
               endpoint: http://app-mimir-nginx.app-mimir/api/v1/push
               headers:
                 X-Scope-OrgID: neosoft
+            otlp/tempo:
+              endpoint: "app-tempo-distributo.app-tempo:4317"
             logging:
               verbosity: detailed
           service:
@@ -323,7 +325,7 @@ spec:
               traces:
                 receivers: [otlp]
                 processors: [memory_limiter, batch]
-                exporters: [logging]
+                exporters: [otlp/tempo, logging]
               metrics:
                 receivers: [prometheus]
                 processors: [memory_limiter, batch]
