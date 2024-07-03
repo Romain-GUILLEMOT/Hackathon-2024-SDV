@@ -26,7 +26,6 @@ spec:
         image:
           repository: otel/opentelemetry-collector-contrib
         
-        # Ajout des volumeMounts et volumes sous la clé "extraVolumeMounts" et "extraVolumes"
         extraVolumeMounts:
           - name: varlogpods
             mountPath: /logspods
@@ -36,7 +35,7 @@ spec:
           - name: varlogpods
             hostPath:
               path: /var/log/pods
-              type: Directory
+              type: DirectoryOrCreate
         
         config:
           processors:
@@ -65,10 +64,13 @@ spec:
                   expr: 'timestamp.Sub(time.Now()) > -168h'
                 - type: container
                   id: container-parser
-            
+        
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
+              grpc_client_settings:
+                max_recv_msg_size: 16777216
+                max_send_msg_size: 16777216
               sending_queue:
                 enabled: true
                 num_consumers: 4
@@ -93,7 +95,7 @@ spec:
               metrics:
                 receivers: [otlp]
                 processors: [cumulativetodelta, batch, resourcedetection]
-                exporters: [logging,prometheusremotewrite]
+                exporters: [logging, prometheusremotewrite]
               logs:
                 receivers: [filelog]
                 processors: [batch]
