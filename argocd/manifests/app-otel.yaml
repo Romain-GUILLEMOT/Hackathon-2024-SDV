@@ -224,7 +224,7 @@ spec:
               headers:
                 X-Scope-OrgID: opentelemetry-collector
             logging:
-              loglevel: debug
+              verbosity: detailed
           service:
             telemetry:
               logs:
