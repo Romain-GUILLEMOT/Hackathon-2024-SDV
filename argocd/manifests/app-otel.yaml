@@ -314,6 +314,8 @@ spec:
                 X-Scope-OrgID: neosoft
             otlp/tempo:
               endpoint: "app-tempo-distributo.app-tempo:4317"
+              tls:
+                insecure: true
             logging:
               verbosity: detailed
           service:
