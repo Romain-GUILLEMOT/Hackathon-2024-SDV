@@ -68,9 +68,6 @@ spec:
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
-              grpc_client_settings:
-                max_recv_msg_size: 16777216
-                max_send_msg_size: 16777216
               sending_queue:
                 enabled: true
                 num_consumers: 4
