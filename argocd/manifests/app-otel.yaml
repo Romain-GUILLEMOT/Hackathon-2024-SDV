@@ -116,7 +116,7 @@ spec:
               namespaces: []
             filelog:
               include:
-                - /logspods/**/*.log
+                - /var/log/pods/*/*/*.log
               start_at: beginning
               include_file_path: true
               include_file_name: false
