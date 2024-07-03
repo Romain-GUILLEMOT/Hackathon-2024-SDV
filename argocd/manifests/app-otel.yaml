@@ -329,7 +329,7 @@ spec:
             extensions: [health_check]
             pipelines:
               traces:
-                receivers: [otlp]
+                receivers: [otlp, jaeger]
                 processors: [memory_limiter, batch]
                 exporters: [otlp/tempo, otlphttp/tempo, logging]
               metrics:
