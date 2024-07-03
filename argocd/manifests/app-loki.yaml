@@ -54,10 +54,12 @@ spec:
               chunk_idle_period: 336h
               chunk_retain_period: 336h
               max_chunk_age: 336h
-          grpc_server_max_recv_msg_size: 16777216
-          grpc_server_max_send_msg_size: 16777216
+          grpc_server_max_recv_msg_size: 104857600
+          grpc_server_max_send_msg_size: 104857600
         server:
           http_listen_port: 3100
+          grpc_server_max_recv_msg_size: 104857600
+          grpc_server_max_send_msg_size: 104857600
         frontend:
           log_queries_longer_than: 60s
           compress_responses: true
