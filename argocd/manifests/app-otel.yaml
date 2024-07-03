@@ -19,15 +19,6 @@ spec:
     chart: opentelemetry-collector
     targetRevision: v0.93.3
     helm:
-      volumeMounts:
-        - name: varlog
-          mountPath: /var/log/pods
-          readOnly: true
-      volumes:
-        - name: varlog
-          hostPath:
-            path: /var/log/pods
-            type: DirectoryOrCreate
       values: |-
         fullnameOverride: app-otel
         mode: deployment
@@ -42,7 +33,7 @@ spec:
             otlp:
               protocols:
                 grpc:
-                  endpoint: "0.0.0.0:4317" 
+                  endpoint: "0.0.0.0:4317"
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
@@ -50,21 +41,20 @@ spec:
               start_at: beginning
               operators:
                 - type: regex_parser
-                  regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<log>.*)$'
+                  regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<level>[^ ]+) (?P<message>.*)$'
                   timestamp:
-                    parse_from: body
+                    parse_from: attributes.timestamp
                     layout: '%Y-%m-%dT%H:%M:%S.%fZ'
                 - type: json_parser
-                  expression: log
+                  expression: message
 
-        
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
             prometheusremotewrite:
               endpoint: http://172.20.146.37:8080/api/v1/push
               headers:
-                X-Scope-OrgID: "neosoft" 
+                X-Scope-OrgID: "neosoft"
             logging:
               loglevel: debug
           service:
@@ -74,10 +64,20 @@ spec:
                 processors: [batch]
                 exporters: [logging]
               metrics:
-                receivers: [otlp]
+                receivers: [otlp,hostmetrics]
                 processors: [cumulativetodelta, batch, resourcedetection]
                 exporters: [logging,prometheusremotewrite]
               logs:
-                receivers: [otlp,filelog]
+                receivers: [filelog]
                 processors: [batch]
                 exporters: [loki]
+
+      volumeMounts:
+        - name: varlog
+          mountPath: /var/log/pods
+          readOnly: true
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log/pods
+            type: DirectoryOrCreate
