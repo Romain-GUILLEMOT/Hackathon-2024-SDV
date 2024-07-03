@@ -126,9 +126,11 @@ spec:
               insecure_skip_verify: true
               extra_metadata_labels:
                 - container.id
-              metrics:
-                k8s.pod.cpu.node.usage:
-                  enabled: true
+              metric_groups:
+                - container
+                - pod
+                - node
+                - volume
             k8s_events:
               namespaces: []
             filelog:
