@@ -20,34 +20,100 @@ spec:
     targetRevision: v0.93.3
     helm:
       values: |-
+        
         fullnameOverride: app-otel
         mode: deployment
+        podAnnotations:
+          pod-security.kubernetes.io/enforce: privileged
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            add:
+              - SYS_ADMIN
+              - NET_ADMIN
         image:
           repository: otel/opentelemetry-collector-contrib
-        
-        extraVolumeMounts:
-          - name: varlogpods
-            mountPath: /logspods
-            readOnly: true
-        
         extraVolumes:
-          - name: varlogpods
+          - name: varlog
             hostPath:
-              path: /var/log/pods
-              type: DirectoryOrCreate
-        
+              path: /var/log
+        extraVolumeMounts:
+          - name: varlog
+            mountPath: /var/log
+            readOnly: true
+        clusterRole:
+          create: true
+          rules:
+            - apiGroups:
+                - ''
+              resources:
+                - nodes
+                - nodes/proxy
+                - services
+                - endpoints
+                - pods
+                - events
+                - namespaces
+                - namespaces/status
+                - pods/status
+                - replicationcontrollers
+                - replicationcontrollers/status
+                - resourcequotas
+              verbs:
+                - get
+                - list
+                - watch
+            - nonResourceURLs:
+                - /metrics
+              verbs:
+                - get
+            - apiGroups:
+                - apps
+              resources:
+                - daemonsets
+                - deployments
+                - replicasets
+                - statefulsets
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - extensions
+              resources:
+                - daemonsets
+                - deployments
+                - replicasets
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - batch
+              resources:
+                - jobs
+                - cronjobs
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - autoscaling
+              resources:
+                - horizontalpodautoscalers
+              verbs:
+                - get
+                - list
+                - watch
         config:
           processors:
             resourcedetection:
               detectors: [env, system]
             cumulativetodelta:
           receivers:
-            otlp:
-              protocols:
-                grpc:
-                  endpoint: "0.0.0.0:4317"
-                http:
-                  endpoint: "0.0.0.0:4318"
+            k8s_events:
+              namespaces: []
             filelog:
               include:
                 - /logspods/**/*.log
@@ -107,7 +173,37 @@ spec:
                   field: resource["cluster"]
                   value: 'eks-cluster'
 
+          processors:
+            resource/k8s_events:
+              attributes:
+                - action: insert
+                  key: cluster
+                  value: 'eks-cluster'
+                - action: insert
+                  key: job
+                  value: 'integrations/kubernetes/eventhandler'
+                - action: insert
+                  key: loki.resource.labels
+                  value: job, cluster
+            resource:
+              attributes:
+                - action: insert
+                  key: loki.format
+                  value: raw
+                - action: insert
+                  key: loki.resource.labels
+                  value: pod, namespace, container, cluster, filename
+            batch:
+              timeout: 1s
+            memory_limiter:
+              limit_mib: 20000
+              spike_limit_mib: 500
+              check_interval: 5s
         
+          extensions:
+            health_check:
+              endpoint: 0.0.0.0:13133
+
           exporters:
             loki:
               endpoint: "http://app-loki-distributor.app-loki:3100/loki/api/v1/push"
@@ -130,10 +226,14 @@ spec:
             logging:
               loglevel: debug
           service:
+            telemetry:
+              logs:
+                encoding: json
+            extensions: [health_check]
             pipelines:
               traces:
                 receivers: [otlp]
-                processors: [batch]
+                processors: [memory_limiter, batch]
                 exporters: [logging]
               metrics:
                 receivers: [otlp, prometheus]
@@ -141,5 +241,9 @@ spec:
                 exporters: [prometheusremotewrite/metricsService]
               logs:
                 receivers: [filelog]
-                processors: [batch]
+                processors: [resource]
                 exporters: [loki]
+              logs/k8s_events:
+                 receivers: [k8s_events]
+                 processors: [batch, resource/k8s_events]
+                 exporters: [loki]
