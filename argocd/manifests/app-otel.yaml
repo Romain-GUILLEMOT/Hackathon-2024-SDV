@@ -20,14 +20,13 @@ spec:
     targetRevision: v0.93.3
     helm:
       values: |-
-        
-        fullnameOverride: app-otel
-        mode: deployment
-        env:
-          - name: NODE_NAME
+        extraEnvs:
+          - name: K8S_NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+        fullnameOverride: app-otel
+        mode: deployment
         podAnnotations:
           pod-security.kubernetes.io/enforce: privileged
         securityContext:
@@ -119,11 +118,17 @@ spec:
             cumulativetodelta:
           receivers:
             kubeletstats:
-                auth_type: serviceAccount
-                endpoint: "https://${NODE_NAME}:10250"
-                collection_interval: 10s
-                extra_metadata_labels:
-                  - "node"
+              collection_interval: 10s
+              auth_type: "serviceAccount"
+              endpoint: "${K8S_NODE_NAME}:10250"
+              insecure_skip_verify: true
+              extra_metadata_labels:
+                - container.id
+              metric_groups:
+                - container
+                - pod
+                - node
+                - volume
             k8s_events:
               namespaces: []
             filelog:
@@ -248,7 +253,7 @@ spec:
                 processors: [memory_limiter, batch]
                 exporters: [logging]
               metrics:
-                receivers: [otlp, prometheus]
+                receivers: [kubeletstats]
                 processors: [memory_limiter, batch]
                 exporters: [prometheusremotewrite/metricsService]
               logs:
