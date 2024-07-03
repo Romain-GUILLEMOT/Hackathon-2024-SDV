@@ -14,15 +14,7 @@ spec:
   project: app-otel
   syncPolicy:
     automated: {}
-  volumeMounts:
-    - name: varlog
-      mountPath: /var/log/pods
-      readOnly: true
-  volumes:
-    - name: varlog
-      hostPath:
-        path: /var/log/pods
-        type: DirectoryOrCreate
+
   source:
     repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
     chart: opentelemetry-collector
@@ -33,6 +25,19 @@ spec:
         mode: deployment
         image:
           repository: otel/opentelemetry-collector-contrib
+        
+        # Ajout des volumeMounts et volumes sous la clé "extraVolumeMounts" et "extraVolumes"
+        extraVolumeMounts:
+          - name: varlogpods
+            mountPath: /var/log/pods
+            readOnly: true
+        
+        extraVolumes:
+          - name: varlogpods
+            hostPath:
+              path: /var/log/pods
+              type: Directory
+        
         config:
           processors:
             resourcedetection:
@@ -48,8 +53,7 @@ spec:
             filelog:
               include: [ /var/log/pods/app-mimir_app-mimir-nginx-6c8d999fb8-xgsbh_27ab3533-13e2-46a2-a056-8f50c0467dd0/nginx/0.log ]
               start_at: beginning
-          
-
+        
           exporters:
             loki:
               endpoint: "http://172.20.104.10:3100/loki/api/v1/push"
@@ -73,4 +77,3 @@ spec:
                 receivers: [filelog]
                 processors: [batch]
                 exporters: [loki]
-
