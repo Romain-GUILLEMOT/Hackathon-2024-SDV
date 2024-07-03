@@ -23,6 +23,11 @@ spec:
         
         fullnameOverride: app-otel
         mode: deployment
+        env:
+          - name: K8S_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
         podAnnotations:
           pod-security.kubernetes.io/enforce: privileged
         securityContext:
