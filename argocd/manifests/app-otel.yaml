@@ -37,7 +37,7 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include: [ /var/log/pods/*/*/0.log ]
+              include: [ /var/log/pods/app-mimir_app-mimir-nginx-6c8d999fb8-xgsbh_27ab3533-13e2-46a2-a056-8f50c0467dd0/nginx/0.log ]
               start_at: beginning
               operators:
                 - type: regex_parser
