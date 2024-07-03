@@ -37,16 +37,14 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include: [ /var/log/pods/**/*.log ]
+              include: [ /var/log/pods/*/*/0.log ]
               start_at: beginning
               operators:
                 - type: regex_parser
-                  regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<level>[^ ]+) (?P<message>.*)$'
+                  regex: '^(?P<timestamp>[^ ]+) (?P<stream>[^ ]+) (?P<level>[^ ]+) (?P<log>.*)$'
                   timestamp:
                     parse_from: attributes.timestamp
                     layout: '%Y-%m-%dT%H:%M:%S.%fZ'
-                - type: json_parser
-                  expression: message
 
           exporters:
             loki:
