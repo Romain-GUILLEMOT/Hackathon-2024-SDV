@@ -25,6 +25,7 @@ spec:
         mode: deployment
         podAnnotations:
           pod-security.kubernetes.io/enforce: privileged
+          kubernetes.io/config.nodeName: {}
         securityContext:
           runAsUser: 0
           runAsGroup: 0
