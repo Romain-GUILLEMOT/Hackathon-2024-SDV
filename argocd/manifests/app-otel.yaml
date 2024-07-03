@@ -221,7 +221,7 @@ spec:
         
           extensions:
             health_check:
-              endpoint: localhost:13133
+              endpoint: 0.0.0.0:13133
 
           exporters:
             loki:
@@ -245,7 +245,7 @@ spec:
             logging:
               verbosity: detailed
           service:
-            telemetry:
+            telemetry:h
               logs:
                 encoding: json
             extensions: [health_check]
