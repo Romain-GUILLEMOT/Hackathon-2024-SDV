@@ -72,3 +72,8 @@ spec:
               url: http://app-loki-query-frontend.app-loki:3100
               access: proxy
               isDefault: false
+            - name: Tempo
+              type: tempo
+              url: http://app-tempo-query-frontend.app-tempo:3100
+              access: proxy
+              isDefault: false

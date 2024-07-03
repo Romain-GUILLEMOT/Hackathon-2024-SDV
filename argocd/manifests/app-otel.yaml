@@ -313,7 +313,11 @@ spec:
               headers:
                 X-Scope-OrgID: neosoft
             otlp/tempo:
-              endpoint: "app-tempo-distributo.app-tempo:4317"
+              endpoint: http://app-tempo-distributo.app-tempo:4317
+              tls:
+                insecure: true
+            otlphttp/tempo:
+              endpoint: http://app-tempo-distributo.app-tempo:4318
               tls:
                 insecure: true
             logging:
@@ -327,7 +331,7 @@ spec:
               traces:
                 receivers: [otlp]
                 processors: [memory_limiter, batch]
-                exporters: [otlp/tempo, logging]
+                exporters: [otlp/tempo, otlphttp/tempo, logging]
               metrics:
                 receivers: [prometheus]
                 processors: [memory_limiter, batch]
