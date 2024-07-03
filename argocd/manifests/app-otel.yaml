@@ -29,7 +29,7 @@ spec:
         # Ajout des volumeMounts et volumes sous la clé "extraVolumeMounts" et "extraVolumes"
         extraVolumeMounts:
           - name: varlogpods
-            mountPath: /var/log/pods
+            mountPath: /logspods
             readOnly: true
         
         extraVolumes:
@@ -51,8 +51,13 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include: [ /var/log/pods/app-mimir_app-mimir-nginx-6c8d999fb8-xgsbh_27ab3533-13e2-46a2-a056-8f50c0467dd0/nginx/0.log ]
+              include_file_path: true
+              include: 
+                - /logspods/app-mimir_app-mimir-nginx-6c8d999fb8-xgsbh_27ab3533-13e2-46a2-a056-8f50c0467dd0/nginx/0.log
               start_at: beginning
+              operators:
+              - id: container-parser
+                type: container
         
           exporters:
             loki:
