@@ -46,7 +46,7 @@ spec:
           - name: varlog
             mountPath: /var/log
             readOnly: true
-    
+        
         clusterRole:
           create: true
           rules:
@@ -113,7 +113,11 @@ spec:
                 - get
                 - list
                 - watch
-        config:            
+        config:
+          processors:
+            resourcedetection:
+              detectors: [env, system]
+            cumulativetodelta:
           receivers:
             kubeletstats:
               collection_interval: 10s
@@ -214,13 +218,18 @@ spec:
               limit_mib: 20000
               spike_limit_mib: 500
               check_interval: 5s
+        
+          extensions:
+            health_check:
+              endpoint: localhost:13133
+
           exporters:
             loki:
               endpoint: "http://app-loki-distributor.app-loki:3100/loki/api/v1/push"
               sending_queue:
                 enabled: true
-                num_consumers: 5
-                queue_size: 5000
+                num_consumers: 10
+                queue_size: 10000
               retry_on_failure:
                 enabled: true
                 initial_interval: 5s
@@ -236,7 +245,7 @@ spec:
             logging:
               verbosity: detailed
           service:
-            telemetry:h
+            telemetry:
               logs:
                 encoding: json
             extensions: [health_check]
@@ -257,6 +266,3 @@ spec:
                  receivers: [k8s_events]
                  processors: [batch, resource/k8s_events]
                  exporters: [loki]
-          extensions:
-            health_check:
-              endpoint: 0.0.0.0:13133
