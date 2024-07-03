@@ -25,6 +25,7 @@ spec:
         mode: deployment
         podAnnotations:
           pod-security.kubernetes.io/enforce: privileged
+          kubernetes.io/config.nodeName: {}
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -42,11 +43,6 @@ spec:
           - name: varlog
             mountPath: /var/log
             readOnly: true
-        env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
     
         clusterRole:
           create: true
