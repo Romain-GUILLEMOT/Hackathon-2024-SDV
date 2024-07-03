@@ -49,18 +49,64 @@ spec:
                 http:
                   endpoint: "0.0.0.0:4318"
             filelog:
-              include_file_path: true
               include:
                 - /logspods/**/*.log
               start_at: beginning
+              include_file_path: true
+              include_file_name: false
               operators:
+                - type: router
+                  id: get-format
+                  routes:
+                    - output: parser-docker
+                      expr: 'body matches "^\\{"'
+                    - output: parser-crio
+                      expr: 'body matches "^[^ Z]+ "'
+                    - output: parser-containerd
+                      expr: 'body matches "^[^ Z]+Z"'
                 - type: regex_parser
-                  regex: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z)'
+                  id: parser-crio
+                  regex: '^(?P<time>[^ Z]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+                  output: extract_metadata_from_filepath
                   timestamp:
-                    parse_from: attributes.timestamp
-                    layout: '%Y-%m-%dT%H:%M:%S.%fZ'
-                - type: container
-                  id: container-parser
+                    parse_from: attributes.time
+                    layout_type: gotime
+                    layout: '2006-01-02T15:04:05.999999999Z07:00'
+                - type: regex_parser
+                  id: parser-containerd
+                  regex: '^(?P<time>[^ ^Z]+Z) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+                  output: extract_metadata_from_filepath
+                  timestamp:
+                    parse_from: attributes.time
+                    layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+                - type: json_parser
+                  id: parser-docker
+                  output: extract_metadata_from_filepath
+                  timestamp:
+                    parse_from: attributes.time
+                    layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+                - type: regex_parser
+                  id: extract_metadata_from_filepath
+                  regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9\-]{16,36})\/(?P<container_name>[^\._]+)\/(?P<restart_count>\d+)\.log$'
+                  parse_from: attributes["log.file.path"]
+                  cache:
+                    size: 128
+                - type: move
+                  from: attributes["log.file.path"]
+                  to: resource["filename"]
+                - type: move
+                  from: attributes.container_name
+                  to: resource["container"]
+                - type: move
+                  from: attributes.namespace
+                  to: resource["namespace"]
+                - type: move
+                  from: attributes.pod_name
+                  to: resource["pod"]
+                - type: add
+                  field: resource["cluster"]
+                  value: 'eks-cluster'
+
         
           exporters:
             loki:

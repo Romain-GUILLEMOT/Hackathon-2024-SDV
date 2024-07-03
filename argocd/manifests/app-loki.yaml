@@ -58,8 +58,6 @@ spec:
           grpc_server_max_send_msg_size: 104857600
         server:
           http_listen_port: 3100
-          grpc_server_max_recv_msg_size: 104857600
-          grpc_server_max_send_msg_size: 104857600
         frontend:
           log_queries_longer_than: 60s
           compress_responses: true
