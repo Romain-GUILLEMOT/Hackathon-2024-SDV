@@ -84,13 +84,3 @@ metadata:
   labels:
     app.kubernetes.io/name: app-tracetest
     app.kubernetes.io/component: app
-  
----
-
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: app-kubelet
-  labels:
-    app.kubernetes.io/name: app-kubelet
-    app.kubernetes.io/component: app
