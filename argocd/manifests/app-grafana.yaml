@@ -51,6 +51,14 @@ spec:
           server:
             domain: ""
             root_url: /
+          smtp:
+            enabled: true
+            host: smtp.romain-guillemot.dev:587
+            user: neosofthackathon2024super@romain-guillemot.dev
+            password: SDQ5Fd6*ez-f5fs56vsdv3dqs
+            skip_verify: true
+            from_address: neosofthackathon2024super@romain-guillemot.dev
+            from_name: Grafana
         sidecar:
           dashboards:
             searchNamespace: ALL
