@@ -20,6 +20,9 @@ spec:
     targetRevision: v8.0.2
     helm:
       values: |-
+        extraEnvs:
+          - name: SMTP_PASSWORD
+            value: SDQ5Fd6*ez-f5fs56vsdv3dqs
         image:
           tag: 10.4.4
         service:
@@ -55,7 +58,7 @@ spec:
             enabled: true
             host: smtp.romain-guillemot.dev:587
             user: neosofthackathon2024super@romain-guillemot.dev
-            password: SDQ5Fd6*ez-f5fs56vsdv3dqs
+            password: ${SMTP_PASSWORD}
             skip_verify: true
             from_address: neosofthackathon2024super@romain-guillemot.dev
             from_name: Grafana
