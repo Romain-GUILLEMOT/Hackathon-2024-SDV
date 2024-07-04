@@ -327,7 +327,7 @@ spec:
               traces:
                 receivers: [otlp, jaeger]
                 processors: [memory_limiter, batch]
-                exporters: [otlp/tempo, otlphttp/tempo, logging]
+                exporters: [otlphttp/tempo, logging]
               metrics:
                 receivers: [prometheus]
                 processors: [memory_limiter, batch]
