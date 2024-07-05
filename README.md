@@ -61,7 +61,7 @@ Les passwords des applications sont enregistrés dans les variables gitlab.
     - url : a753797ed306743d2a965e4916b1f37f-c1a2f4014f7cf7a4.elb.eu-west-1.amazonaws.com
     - user : admin
 - grafana :
-    - url : a72896e0a59504e9287b70b2f6848527-3a0b8633ae3acfab.elb.eu-west-1.amazonaws.com
+    - url :  aac45a0883fcf48bc8aae38ecc98eeba-52fc6d29a9ca2bca.elb.eu-west-1.amazonaws.com
     - user : admin
 - pokeshop :
     - url : a412e7325e40b4493b95baa7b14658fa-1615178376.eu-west-1.elb.amazonaws.com
