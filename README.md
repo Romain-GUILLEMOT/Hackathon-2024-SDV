@@ -1,5 +1,18 @@
 # SupDeVinci Equipe 9
 
+## Rendu du projet
+
+### Documentation et ressources
+
+Tous les éléments demandés pour le projet sont disponibles à l'adresse suivante :
+
+[Les pixels perfectionnistes - Hackathon 2024 Rendu](https://s.craft.me/xBkQ6VTcAtxrhP)
+
+Ce lien vous donnera accès à l'ensemble de la documentation, des rapports et des autres ressources requises pour l'évaluation du projet.
+
+Une vidéo de présentation est aussi disponible sur ce lien.
+
+
 ## Récupérer le kubeconfig
 
 REQUIS : ```aws cli``` et ```kubectl```
