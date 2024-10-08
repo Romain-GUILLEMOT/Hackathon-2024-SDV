@@ -1,4 +1,15 @@
-# SupDeVinci Equipe 9
+# SupDeVinci Hackathon - Équipe 9
+
+Ce projet a été réalisé dans le cadre du hackathon organisé par SupDeVinci en 2024 avec l'aide de Néosoft.
+
+## Participants
+
+- [Romain GUILLEMOT](https://github.com/Romain-GUILLEMOT) - GitHub
+- [Edouard LAVALLEY](https://github.com/Misteryolo64) - GitHub
+- Hanifi GOZEN
+- Xavier THIRION
+- Thierno DIALLO
+
 
 ## Rendu du projet
 
@@ -86,4 +97,3 @@ Pour utilisez Pokeshop avec tracetest vous pouvez trouvez les documentations iç
     - https://github.com/kubeshop/pokeshop/blob/master/docs/overview.md
     - https://tracetest.io/
 
-Pour l'utilisation de TraceTest et de Pokeshop n'hésitez pas à nous contacter.    
